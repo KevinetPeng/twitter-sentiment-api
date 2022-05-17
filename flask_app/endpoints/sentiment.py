@@ -16,10 +16,8 @@ def getTopicSentiment(entity):
     data, errors = itemgetter('data', 'errors')(twitterService.byEntity(entity, size))
 
     if errors:
-        return {
-            'errors': jsonify(errors),
-            'message': 'Error while fetching tweets.',
-        }
+        print('error in entity endpoint')
+        raise Exception()
     
 
     return {
