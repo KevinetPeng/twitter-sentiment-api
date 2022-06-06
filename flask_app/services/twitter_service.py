@@ -8,11 +8,13 @@ class TwitterService:
     def __init__(self):
         load_dotenv()
         self.twitter = tweepy.Client(os.getenv('TWITTER_BEARER_TOKEN'))
+        self.base_query = 'lang:en -has:videos -has:media -is:retweet'
 
     def sanitize_tweet(self, tweet):
         tweet = re.sub('@[^\s]+', '', tweet)
         tweet = re.sub('http[^\s]+', '', tweet)
         tweet = re.sub('RT\s', '', tweet)
+        tweet = re.sub('\\n', ' ', tweet)
 
         return tweet.strip()
 
