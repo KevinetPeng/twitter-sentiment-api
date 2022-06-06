@@ -37,3 +37,25 @@ def getTopicSentiment(entity):
         'raw_tweets': raw_tweets,
         'raw_sentiments': sentiment_data['sentiment_list'],
     }
+ 
+
+@bp.route('/phrase/<phrase>')
+def getPhraseSentiment(phrase):
+    size = request.args.get('size', default=25, type=int)
+    sentiment_threshold = request.args.get('threshold', default_threshold, type=float)
+
+    tweets, errors = itemgetter('data', 'errors')(twitterService.byPhrase(phrase, size))
+    sanitized_tweets, raw_tweets = tweets['sanitized_tweets'], tweets['raw_tweets']
+
+    if errors:
+        print('error in phrase endpoint')
+        raise Exception()
+    
+    sentiment_data = sentiment.getSentiment(sanitized_tweets, sentiment_threshold)
+
+    return {
+        'sentiment_summary': sentiment_data['summary'],
+        'sample_size': len(raw_tweets),
+        'raw_tweets': raw_tweets,
+        'raw_sentiments': sentiment_data['sentiment_list'],
+    }
