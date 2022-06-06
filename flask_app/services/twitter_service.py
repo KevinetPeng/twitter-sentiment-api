@@ -45,8 +45,9 @@ class TwitterService:
         raw_tweets = map(lambda tweet: tweet.text, res.data)
 
         return {
-            'data': list(map(
-                lambda tweet: self.sanitize_tweet(tweet.text), res.data
-            )),
+            'data': {
+                'sanitized_tweets': list(sanitized_tweets),
+                'raw_tweets': list(raw_tweets),
+            },
             'errors': res.errors
         }
