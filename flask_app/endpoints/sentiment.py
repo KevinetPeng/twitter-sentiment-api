@@ -43,8 +43,13 @@ def getTopicSentiment(entity):
 def getPhraseSentiment(phrase):
     size = request.args.get('size', default=25, type=int)
     sentiment_threshold = request.args.get('threshold', default_threshold, type=float)
+    isExact = request.args.get('exact', default=False, type=bool)
 
-    tweets, errors = itemgetter('data', 'errors')(twitterService.byPhrase(phrase, size))
+    if isExact:
+        tweets, errors = itemgetter('data', 'errors')(twitterService.byExactPhrase(phrase, size))
+    else:
+        tweets, errors = itemgetter('data', 'errors')(twitterService.byPhrase(phrase, size))
+        
     sanitized_tweets, raw_tweets = tweets['sanitized_tweets'], tweets['raw_tweets']
 
     if errors:
